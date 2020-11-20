@@ -1,0 +1,5 @@
+// mutex.c
+
+void sync () {
+
+}
