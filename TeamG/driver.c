@@ -1,16 +1,78 @@
 // Team G\
 // Amanda Lowe, Josh Minton, Brady Prince
 
+#include <iostream>
 #include <stdio.h>
 #include <string.h>
 
-void readFile() {
-}
+using namespace std;
 
-void operations() {
+// Function to find the waiting time for all processes
+void findWaitingTime(int processes[], int n, int bt[], int wt[], int at[]) {
+    int service_time[n];
+    service_time[0] = 0;
+    wt[0] = 0;
+ 
+    // calculating waiting time
+    for (int i = 1; i < n ; i++)
+    {
+        // Add burst time of previous processes
+        service_time[i] = service_time[i-1] + bt[i-1];
+ 
+        // Find waiting time for current process =
+        // sum - at[i]
+        wt[i] = service_time[i] - at[i];
+ 
+        // If waiting time for a process is in negative
+        // that means it is already in the ready queue
+        // before CPU becomes idle so its waiting time is 0
+        if (wt[i] < 0)
+            wt[i] = 0;
+    }
+}
+ 
+// Function to calculate turn around time
+void findTurnAroundTime(int processes[], int n, int bt[], int wt[], int tat[]) {
+    // Calculating turnaround time by adding bt[i] + wt[i]
+    for (int i = 0; i < n ; i++)
+        tat[i] = bt[i] + wt[i];
+}
+ 
+// Function to calculate average waiting and turn-around
+// times.
+void findavgTime(int processes[], int n, int bt[], int at[]) {
+    int wt[n], tat[n];
+ 
+    // Function to find waiting time of all processes
+    findWaitingTime(processes, n, bt, wt, at);
+ 
+    // Function to find turn around time for all processes
+    findTurnAroundTime(processes, n, bt, wt, tat);
+ 
+    // Display processes along with all details
+    cout << "Processes " << " Burst Time " << " Arrival Time "
+         << " Waiting Time " << " Turn-Around Time "
+         << " Completion Time \n";
+    int total_wt = 0, total_tat = 0;
+    for (int i = 0 ; i < n ; i++)
+    {
+        total_wt = total_wt + wt[i];
+        total_tat = total_tat + tat[i];
+        int compl_time = tat[i] + at[i];
+        cout << " " << i+1 << "\t\t" << bt[i] << "\t\t"
+             << at[i] << "\t\t" << wt[i] << "\t\t "
+             << tat[i]  <<  "\t\t " << compl_time << endl;
+    }
+ 
+    cout << "Average waiting time = "
+         << (float)total_wt / (float)n;
+    cout << "\nAverage turn around time = "
+         << (float)total_tat / (float)n;
 }
 
 int main() {
+    // n = trainers
+    // m = couches
 	int nMin = 3;
 	int mMin = 3;
 	int nMax = 5;
@@ -18,25 +80,36 @@ int main() {
 	
 	bool trainer == true;
 	bool cust == true;
+    bool couch == true;
+    
+    char onCouch = "Customer is on couch";
+    char trainerOnUni = "Trainer goes to waiting room on electric unicycle scooter";
 	
 	for (int i = nMin; i <= nMax; i++) {
 		for (int j = mMin; j <= mMax; j++) {
-		// if customer arrives to fitness center
-		// no trainer is available
-		// customer goes to waiting room to take couch
-		while (!trainer) {
-			// if all couches occupied, customer leaves
-			if (cust) {
-				cust = false;
-			}
-		}
+            // if customer arrives to fitness center
+            // no trainer is available
+            while (!trainer) {
+                // if all couches occupied, customer leaves
+                if (cust) {
+                    cust = false;
+                }
+                // customer goes to waiting room to take couch
+                else if (cust && couch) {
+                    printf("%c %d\n", onCouch, m[j]);
+                }
+            }
 
-		// if trainer becomes available
-		// goes to waiting room on electric unicycle scooter
-		// pick customer based on FCFS
+            // if trainer becomes available
+            while (trainer) {
+                // goes to waiting room on electric unicycle scooter
+                printf ("%c\n" trainerOnUni);
+                // pick customer based on FCFS
 
-		// if customer arrives and trainer is available
-		// trainer immediately assists walk in
+                // if customer arrives and trainer is available
+                // trainer immediately assists walk in
+            }
+		
 		}
 	}
 	
