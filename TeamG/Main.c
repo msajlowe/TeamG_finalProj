@@ -5,11 +5,6 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-
-
-
-
-
 int main()
 {
 	printf("ENTER N: ");
@@ -24,7 +19,6 @@ int main()
 	
 	
 	FILE* stream = fopen("a.txt", "r");
-	//char* line = (char*)malloc(100 * sizeof(char));
 	char line[100];
 	if(stream == NULL)
 	{
@@ -40,15 +34,11 @@ int main()
 	fclose(stream);
 	
 	
-	pid_t* pid = mmap(NULL, numOfCustomers * sizeof(pid_t), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	int* bt = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	int* wt = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	int* at = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	int* tat = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	pid_t* processIDs = mmap(NULL, numOfCustomers * sizeof(pid_t), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	int* arrivalTime = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	
 	
-	
-	
+	int isParent = 0;
 	stream = fopen("a.txt", "r");
 	if(stream == NULL)
 	{
@@ -57,88 +47,56 @@ int main()
 		return 1;
 	}
 	fgets(line, 100, stream);
-	for(int i = 0; i < numOfCustomers; i++)
+	int i;
+	for(i = 0; i < numOfCustomers; i++)
 	{
 		fgets(line, 100, stream);
 		char* end;
-		char data0[100];
+		char data[100];
 		int j = 0;
-		int k = 0;
 		while(line[j] != ',' && line[j] != '\n')
 		{
-			data0[k] = line[j];
+			data[j] = line[j];
 			j++;
-			k++;
 		}
-		bt[i] = int(strtol(data0, &end, 10));
+		arrivalTime[i] = int(strtol(data, &end, 10));
 		if(end == str)
 		{
 			printf("could not read bt");
+			fclose(stream);
 			return 1;
 		}
-		char data1[100];
-		k = 0;
-		while(line[j] != ',' && line[j] != '\n')
-		{
-			data1[k] = line[j];
-			j++;
-			k++;
-		}
-		wt[i] = int(strtol(data1, &end, 10));
-		if(end == str)
-		{
-			printf("could not read wt");
-			return 1;
-		}
-		char data2[100];
-		k = 0;
-		while(line[j] != ',' && line[j] != '\n')
-		{
-			data2[k] = line[j];
-			j++;
-			k++;
-		}
-		at[i] = int(strtol(data2, &end, 10));
-		if(end == str)
-		{
-			printf("could not read at");
-			return 1;
-		}
-		char data3[100];
-		k = 0;
-		while(line[j] != ',' && line[j] != '\n')
-		{
-			data3[k] = line[j];
-			j++;
-			k++;
-		}
-		tat[i] = int(strtol(data3, &end, 10));
-		if(end == str)
-		{
-			printf("could not read tat");
-			return 1;
-		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		if((pid[i] = fork()) == 0)
+		pid_t pid = fork();
+		if(pid == 0)
+			isParent = 0;
 			break;
-		
-			
+		else
+		{
+			processIDs[i] = pid;
+			isParent = 1;
+		}
+	}
+	if(isParent)
+	{
+			for(int j = 0; j < numOfCustomers; j++)
+			{
+				wait(NULL);
+			}
+	}
+	else
+	{
+		// i is the customer number
 		
 	}
 	
-	//free(line);
+	
+	
+	
+	
+	
+	
+	
+	
 	fclose(stream);
 	return 1;
 }
