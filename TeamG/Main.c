@@ -86,17 +86,11 @@ int main()
 	else
 	{
 		// i is the customer number
-		
+//>>>>>>>>>>>>>// put calls to other functions here 
+
+
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	fclose(stream);
 	return 1;
 }
