@@ -1,17 +1,21 @@
 // sync.c
 
-void deadlock () {
+void deadlock() 
+{
 
 }
 
-void starvation () {
+void starvation() 
+{
 
 }
 
-void unfair() {
+void unfair() 
+{
 
 }
 
-void avoidance () {
+void avoidance() 
+{
 
 }
