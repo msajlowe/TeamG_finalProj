@@ -19,7 +19,7 @@ int main() {
 	scanf("%s", &name);
 	
 	
-	FILE* stream = fopen("a.txt", "r");
+	FILE* stream = fopen(name, "r");
 	char line[100];
 	if(stream == NULL)
 	{
@@ -40,7 +40,7 @@ int main() {
 	
 	
 	int isParent = 0;
-	stream = fopen("a.txt", "r");
+	stream = fopen(name, "r");
 	if(stream == NULL)
 	{
 		fclose(stream);
