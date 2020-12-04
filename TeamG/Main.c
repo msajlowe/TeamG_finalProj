@@ -4,12 +4,10 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <semaphore.h>
-
-#include sync.c
-
-
-int main()
-{
+#include <sys/mman.h>
+	
+int main() {
+	char* str;
 	printf("ENTER N: ");
 	int n;
 	scanf("%d", &n);
@@ -21,7 +19,7 @@ int main()
 	scanf("%s", &name);
 	
 	
-	FILE* stream = fopen(name, "r");
+	FILE* stream = fopen("a.txt", "r");
 	char line[100];
 	if(stream == NULL)
 	{
@@ -37,21 +35,12 @@ int main()
 	fclose(stream);
 	
 	
-	
-	sem_t sem;
-	sem_init(&sem, pshared, n);
-	
-	int pshared = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	pshared = 1;
 	pid_t* processIDs = mmap(NULL, numOfCustomers * sizeof(pid_t), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	int* arrivalTime = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	
 	
-	
-	//
-	
 	int isParent = 0;
-	stream = fopen(name, "r");
+	stream = fopen("a.txt", "r");
 	if(stream == NULL)
 	{
 		fclose(stream);
@@ -71,19 +60,18 @@ int main()
 			data[j] = line[j];
 			j++;
 		}
-		arrivalTime[i] = int(strtol(data, &end, 10));
-		if(end == str)
-		{
+		arrivalTime[i] = strtol(data, &end, 10);
+		if (end == str) {
 			printf("could not read bt");
 			fclose(stream);
 			return 1;
 		}
 		pid_t pid = fork();
-		if(pid == 0)
+		if(pid == 0) {
 			isParent = 0;
 			break;
-		else
-		{
+		}
+		else {
 			processIDs[i] = pid;
 			isParent = 1;
 		}
@@ -99,10 +87,7 @@ int main()
 	{
 		// i is the customer number
 //>>>>>>>>>>>>>// put calls to other functions here 
-	
-	
-	
-	
+
 
 
 	}
