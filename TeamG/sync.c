@@ -1,39 +1,54 @@
 // sync.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-void deadlock (int a, bool b, bool c) {
+#include <driver.h>
+
+#define MAX_CUST(5) // upper limit on customers, from driver
+
+struct node {
+	int f;
+	int cust;
+	float weight;
+	int num;
+}
+// n = trainers 3 > n > 5
+// m = couches 3 > m > 6
+void deadlock (int n, int m) {
 	// if trainer does not see a client
 	// will go play with phone
-	if (a != 0) {
-		b == true;
-		c == false;
+	char str;
+	if (n) {
 		printf("Trainer cannot find client.\n");
 	}
-	return 0;
+
 }
 
-void starvation (int a, bool b) {
+void starvation (int n, int m) {
 	// trainer helping other clients with higher priority
 	// client stays waiting indefinitely 
-	if (a != 0) {
-		b == false;
+	if (!n) {
 		// client is unknown
 		printf("All trainers are busy.");
 	}
-	return 0;
+
 }
 
-void unfair(int a, bool b, bool c) {
+void unfair(int n, int m) {
 	// trainer spots client come in and helps
 	// without checking waiting room
-	if (a != 0) {
-		b == false;
-		c == true;
+	if (!n && m) {
 		printf("The available trainer got sidetracked by another client");
 	}
 	
-	return 0;
 }
 
-void avoidance () {
+void avoidance (int n, int m) {
 	// if deadlock is not detected
+	if (n && m) {
+		printf("Resume as normal.");
+		return(stream);
+	}
 }
+
