@@ -19,7 +19,7 @@ int main() {
 	scanf("%s", &name);
 	
 	
-	FILE* stream = fopen("a.txt", "r");
+	FILE* stream = fopen(name, "r");
 	char line[100];
 	if(stream == NULL)
 	{
@@ -35,12 +35,15 @@ int main() {
 	fclose(stream);
 	
 	
+	
+	
+	int pshared = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	pid_t* processIDs = mmap(NULL, numOfCustomers * sizeof(pid_t), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	int* arrivalTime = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	
 	
 	int isParent = 0;
-	stream = fopen("a.txt", "r");
+	stream = fopen(name, "r");
 	if(stream == NULL)
 	{
 		fclose(stream);
