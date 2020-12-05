@@ -40,7 +40,7 @@ int main()
 	scanf("%d", &m);
 	printf("ENTER File Name: ");
 	char* name;
-	scanf("%s", &name);
+	scanf("%s", name);
 	
 	
 	FILE* stream = fopen(name, "r");
@@ -61,10 +61,10 @@ int main()
 	
 	sem_t semaphore;
 	
-	int trainerInWaitingRoom = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	trainerInWaitingRoom = 0;
-	int pshared = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	pshared = 1;
+	int* trainerInWaitingRoom = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	*trainerInWaitingRoom = 0;
+	int* pshared = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	*pshared = 1;
 	pid_t* processIDs = mmap(NULL, numOfCustomers * sizeof(pid_t), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	int* arrivalTimes = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	int* inWaitingRoom = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
@@ -93,7 +93,7 @@ int main()
 			data[j] = line[j];
 			j++;
 		}
-		arrivalTime[i] = strtol(data, &end, 10);
+		arrivalTimes[i] = strtol(data, &end, 10);
 		if (end == str) {
 			printf("could not read bt");
 			fclose(stream);
@@ -120,7 +120,7 @@ int main()
 	else
 	{
 		inWaitingRoom[i] = 0;
-		sleep(arivalTime[i]);
+		sleep(arivalTimes[i]);
 		
 		if(UFlag == 'Y')
 		{
