@@ -35,11 +35,14 @@ int main() {
 	fclose(stream);
 	
 	
-	
+	sem_t semaphore;
 	
 	int pshared = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	pid_t* processIDs = mmap(NULL, numOfCustomers * sizeof(pid_t), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	int* arrivalTime = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	int* arrivalTimes = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	int* inWaitingRoom = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	
+	sem_init(&semaphore, pshared, n);
 	
 	
 	int isParent = 0;
@@ -85,14 +88,31 @@ int main() {
 			{
 				wait(NULL);
 			}
+			sem_close(&semaphore);
 	}
 	else
 	{
 		// i is the customer number
 //>>>>>>>>>>>>>// put calls to other functions here 
+		sleep(arivalTime[i]);
+		inWaitingRoom[i] = 1;
+		
+		
+		
+		
+		sem_wait(&semaphore);
+		if(inWaitingRoom[i] != 1)
+		{
+			sem_post(&semaphore);
+			return 1;
+		}
+		inWaitingRoom[i] = 0;
 
 
 
+
+
+		sem_post(&semaphore);
 	}
 	fclose(stream);
 	return 1;
