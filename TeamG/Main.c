@@ -6,8 +6,24 @@
 #include <semaphore.h>
 #include <sys/mman.h>
 	
-int main() {
-	char* str;
+#include "sync.c"	
+int main() 
+{
+	
+	printf("Use Solution For Starvation [Y/N]: ");
+	char SFlag;
+	scanf("%c", &SFlag);
+	
+	printf("Use Solution For Deadlock [Y/N]: ");
+	char DFlag;
+	scanf("%c", &DFlag);
+	
+	printf("Use Solution For Unfair Schedualing [Y/N]: ");
+	char UFlag;
+	scanf("%c", &UFlag);
+	
+	
+	
 	printf("ENTER N: ");
 	int n;
 	scanf("%d", &n);
@@ -99,11 +115,15 @@ int main() {
 //>>>>>>>>>>>>>// put calls to other functions here 
 		inWaitingRoom[i] = 0;
 		sleep(arivalTime[i]);
+		
+		detectUnfair(m, i, arrivalTimes, inWaitingRoom, numOfCustomers);
+		solveUnfair(i, arrivalTimes, inWaitingRoom, numOfCustomers);
+		detectDeadlock(semaphor, trainerInWaitingRoom);
+		solveDeadlock();
+		detectStarvation(semaphor, trainerInWaitingRoom);
+		solveStarvation();
+		
 		inWaitingRoom[i] = 1;
-		
-		
-		
-		
 		sem_wait(&semaphore);
 		if(inWaitingRoom[i] != 1)
 		{
