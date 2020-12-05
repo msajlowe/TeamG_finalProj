@@ -1,5 +1,13 @@
-// mutex.c
+/////////////////////////////////////////////////////
+/*
+Author: Brady Prince, Amanda Lowe, Josh Minton
+Email: prady.prince@okstate.edu,
+Date: 12/2/2020
+Program Description: 
+*/
+////////////////////////////////////////////////////
 
-void sync () {
+void sync () 
+{
 
 }
