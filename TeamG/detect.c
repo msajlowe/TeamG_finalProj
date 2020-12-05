@@ -1,9 +1,11 @@
 // detect.c
 
-void occurrence () {
+void occurrence() 
+{
 
 }
 
-void recovery () {
+void recovery() 
+{
 
 }
