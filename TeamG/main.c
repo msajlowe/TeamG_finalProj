@@ -37,7 +37,10 @@ int main() {
 	
 	sem_t semaphore;
 	
+	int trainerInWaitingRoom = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	trainerInWaitingRoom = 0;
 	int pshared = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	pshared = 1;
 	pid_t* processIDs = mmap(NULL, numOfCustomers * sizeof(pid_t), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	int* arrivalTimes = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	int* inWaitingRoom = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
@@ -94,6 +97,7 @@ int main() {
 	{
 		// i is the customer number
 //>>>>>>>>>>>>>// put calls to other functions here 
+		inWaitingRoom[i] = 0;
 		sleep(arivalTime[i]);
 		inWaitingRoom[i] = 1;
 		
@@ -113,6 +117,9 @@ int main() {
 
 
 		sem_post(&semaphore);
+		trainerInWaitingRoom = 1;
+		sleep(10);
+		trainerInWaitingRoom = 0;
 	}
 	fclose(stream);
 	return 1;
