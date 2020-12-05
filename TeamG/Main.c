@@ -17,18 +17,18 @@ Program Description:
 #include "sync.c"	
 int main() 
 {
-	
+	char* str;
 	printf("Use Solution For Starvation [Y/N]: ");
 	char SFlag;
-	scanf("%c", &SFlag);
+	scanf(" %c", &SFlag);
 	
 	printf("Use Solution For Deadlock [Y/N]: ");
 	char DFlag;
-	scanf("%c", &DFlag);
+	scanf(" %c", &DFlag);
 	
 	printf("Use Solution For Unfair Schedualing [Y/N]: ");
 	char UFlag;
-	scanf("%c", &UFlag);
+	scanf(" %c", &UFlag);
 	
 	
 	
@@ -39,7 +39,7 @@ int main()
 	int m;
 	scanf("%d", &m);
 	printf("ENTER File Name: ");
-	char* name;
+	char name[100];
 	scanf("%s", name);
 	
 	
@@ -69,7 +69,7 @@ int main()
 	int* arrivalTimes = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	int* inWaitingRoom = mmap(NULL, numOfCustomers * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	
-	sem_init(&semaphore, pshared, n);
+	sem_init(&semaphore, *pshared, n);
 	
 	
 	int isParent = 0;
@@ -111,7 +111,8 @@ int main()
 	}
 	if(isParent)
 	{
-			for(int j = 0; j < numOfCustomers; j++)
+			int j;
+			for(j = 0; j < numOfCustomers; j++)
 			{
 				wait(NULL);
 			}
@@ -120,12 +121,14 @@ int main()
 	else
 	{
 		inWaitingRoom[i] = 0;
-		sleep(arivalTimes[i]);
+		sleep(arrivalTimes[i]);
 		
 		if(UFlag == 'Y')
 		{
-			detectUnfair(m, i, arrivalTimes, inWaitingRoom, numOfCustomers);
-			solveUnfair(i, arrivalTimes, inWaitingRoom, numOfCustomers);
+			if(detectUnfair(m, i, arrivalTimes, inWaitingRoom, numOfCustomers))
+			{
+				solveUnfair(i, arrivalTimes, inWaitingRoom, numOfCustomers);
+			}
 		}
 		else
 		{
@@ -137,12 +140,14 @@ int main()
 		}
 		if(DFlag == 'Y')
 		{
-			detectDeadlock(semaphor, trainerInWaitingRoom);
-			solveDeadlock();
+			if(detectDeadlock(semaphore, trainerInWaitingRoom))
+			{
+				solveDeadlock();
+			}
 		}
 		else
 		{
-			if(detectDeadlock(semaphor, trainerInWaitingRoom))
+			if(detectDeadlock(semaphore, trainerInWaitingRoom))
 			{
 				printf("Exiting Program");
 				exit(1);
@@ -150,12 +155,14 @@ int main()
 		}
 		if(SFlag == 'Y')
 		{
-			detectStarvation(semaphor, trainerInWaitingRoom);
-			solveStarvation();
+			if(detectStarvation(semaphore, trainerInWaitingRoom))
+			{
+				solveStarvation();
+			}
 		}
 		else
 		{
-			if(detectStarvation(semaphor, trainerInWaitingRoom))
+			if(detectStarvation(semaphore, trainerInWaitingRoom))
 			{
 				printf("Exiting Program");
 				exit(1);
@@ -176,9 +183,9 @@ int main()
 
 
 		sem_post(&semaphore);
-		trainerInWaitingRoom = 1;
-		sleep(10);
-		trainerInWaitingRoom = 0;
+		*trainerInWaitingRoom = 1;
+		sleep(5);
+		*trainerInWaitingRoom = 0;
 	}
 	fclose(stream);
 	return 1;
