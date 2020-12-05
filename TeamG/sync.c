@@ -25,7 +25,7 @@ void solveDeadlock()
 }
 
 
-void detectStarvation(sem_t semaphor, int trainerInWaitingRoom) 
+int detectStarvation(sem_t semaphor, int trainerInWaitingRoom) 
 {
 	int numberInWaitingRoom; 
 	sem_getValue(&semaphor, &numberInWaitingRoom);
@@ -46,7 +46,8 @@ void solveStarvation()
 int detectUnfair(int m, int i, int* arrivalTimes, int* inWaitingRoom, int numOfCustomers) 
 {
 	int numberInWaitingRoom; 
-	for(int j = 0; j < numOfCustomers; j++)
+	int j;
+	for(j = 0; j < numOfCustomers; j++)
 	{
 		if(inWaitingRoom[j] == 1)
 		{
@@ -56,7 +57,7 @@ int detectUnfair(int m, int i, int* arrivalTimes, int* inWaitingRoom, int numOfC
 	if(numberInWaitingRoom < m) return 0; 
 	for(int j = 0; j < numOfCustomers; j++)
 	{
-		if(arrivalTime[i] <= arrivalTime[j] && inWaitingRoom[j])
+		if(arrivalTimes[i] <= arrivalTime[j] && inWaitingRoom[j])
 		{
 			printf("Unfair Scedualling Detected \n");
 			return 1;
@@ -66,9 +67,10 @@ int detectUnfair(int m, int i, int* arrivalTimes, int* inWaitingRoom, int numOfC
 }
 void solveUnfair(int i, int* arrivalTimes, int* inWaitingRoom, int numOfCustomers) 
 {
-	for(int j = 0; j < numOfCustomers; j++)
+	int j;
+	for(j = 0; j < numOfCustomers; j++)
 	{
-		if(arrivalTime[i] < arrivalTime[j] && inWaitingRoom[j])
+		if(arrivalTimes[i] < arrivalTime[j] && inWaitingRoom[j])
 		{
 			inWaitingRoom[i] = 1;
 			inWaitingRoom[j] = 0;
