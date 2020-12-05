@@ -1,3 +1,11 @@
+/////////////////////////////////////////////////////
+/*
+Author: Brady Prince, Amanda Lowe, Josh Minton
+Email: prady.prince@okstate.edu,
+Date: 12/2/2020
+Program Description: 
+*/
+////////////////////////////////////////////////////
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdio.h>
@@ -111,8 +119,6 @@ int main()
 	}
 	else
 	{
-		// i is the customer number
-//>>>>>>>>>>>>>// put calls to other functions here 
 		inWaitingRoom[i] = 0;
 		sleep(arivalTime[i]);
 		
@@ -165,7 +171,7 @@ int main()
 		}
 		inWaitingRoom[i] = 0;
 
-
+		printf("customer is training \n");
 
 
 
