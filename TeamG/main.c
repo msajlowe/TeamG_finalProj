@@ -116,12 +116,45 @@ int main()
 		inWaitingRoom[i] = 0;
 		sleep(arivalTime[i]);
 		
-		detectUnfair(m, i, arrivalTimes, inWaitingRoom, numOfCustomers);
-		solveUnfair(i, arrivalTimes, inWaitingRoom, numOfCustomers);
-		detectDeadlock(semaphor, trainerInWaitingRoom);
-		solveDeadlock();
-		detectStarvation(semaphor, trainerInWaitingRoom);
-		solveStarvation();
+		if(UFlag == 'Y')
+		{
+			detectUnfair(m, i, arrivalTimes, inWaitingRoom, numOfCustomers);
+			solveUnfair(i, arrivalTimes, inWaitingRoom, numOfCustomers);
+		}
+		else
+		{
+			if(detectUnfair(m, i, arrivalTimes, inWaitingRoom, numOfCustomers))
+			{
+				printf("Exiting Program");
+				exit(1);
+			}
+		}
+		if(DFlag == 'Y')
+		{
+			detectDeadlock(semaphor, trainerInWaitingRoom);
+			solveDeadlock();
+		}
+		else
+		{
+			if(detectDeadlock(semaphor, trainerInWaitingRoom))
+			{
+				printf("Exiting Program");
+				exit(1);
+			}
+		}
+		if(SFlag == 'Y')
+		{
+			detectStarvation(semaphor, trainerInWaitingRoom);
+			solveStarvation();
+		}
+		else
+		{
+			if(detectStarvation(semaphor, trainerInWaitingRoom))
+			{
+				printf("Exiting Program");
+				exit(1);
+			}
+		}
 		
 		inWaitingRoom[i] = 1;
 		sem_wait(&semaphore);
