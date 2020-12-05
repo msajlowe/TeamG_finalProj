@@ -7,11 +7,11 @@ Program Description:
 */
 ////////////////////////////////////////////////////
 
-int detectDeadlock(sem_t semaphor, int trainerInWaitingRoom) 
+int detectDeadlock(sem_t semaphore, int* trainerInWaitingRoom) 
 {
 	int numberInWaitingRoom; 
-	sem_getValue(&semaphor, &numberInWaitingRoom);
-	if(trainerInWaitingRoom == 1 && abs(numberInWaitingRoom) == 0)
+	sem_getvalue(&semaphore, &numberInWaitingRoom);
+	if(*trainerInWaitingRoom == 1 && abs(numberInWaitingRoom) == 0)
 	{
 		printf("Deadlock Detected \n");
 		return 1;
@@ -25,11 +25,11 @@ void solveDeadlock()
 }
 
 
-int detectStarvation(sem_t semaphor, int trainerInWaitingRoom) 
+int detectStarvation(sem_t semaphore, int* trainerInWaitingRoom) 
 {
 	int numberInWaitingRoom; 
-	sem_getValue(&semaphor, &numberInWaitingRoom);
-	if(trainerInWaitingRoom == 1 && abs(numberInWaitingRoom) >= 0)
+	sem_getvalue(&semaphore, &numberInWaitingRoom);
+	if(*trainerInWaitingRoom == 1 && abs(numberInWaitingRoom) >= 0)
 	{
 		printf("Starvation Detected \n");
 		return 1;
@@ -55,9 +55,9 @@ int detectUnfair(int m, int i, int* arrivalTimes, int* inWaitingRoom, int numOfC
 		}
 	}
 	if(numberInWaitingRoom < m) return 0; 
-	for(int j = 0; j < numOfCustomers; j++)
+	for(j = 0; j < numOfCustomers; j++)
 	{
-		if(arrivalTimes[i] <= arrivalTime[j] && inWaitingRoom[j])
+		if(arrivalTimes[i] <= arrivalTimes[j] && inWaitingRoom[j])
 		{
 			printf("Unfair Scedualling Detected \n");
 			return 1;
@@ -70,7 +70,7 @@ void solveUnfair(int i, int* arrivalTimes, int* inWaitingRoom, int numOfCustomer
 	int j;
 	for(j = 0; j < numOfCustomers; j++)
 	{
-		if(arrivalTimes[i] < arrivalTime[j] && inWaitingRoom[j])
+		if(arrivalTimes[i] < arrivalTimes[j] && inWaitingRoom[j])
 		{
 			inWaitingRoom[i] = 1;
 			inWaitingRoom[j] = 0;
